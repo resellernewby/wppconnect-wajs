@@ -10,3 +10,17 @@ window.WWebJS.checkNumberStatus = async (id) => {
     return false;
   }
 };
+window.WWebJS.sendMessageToId = async (chatId, message) => {
+  try {
+    const numberExist = await window.WWebJS.checkNumberStatus(chatId); // xxxxxxx@c.us
+
+    if (!numberExist) return false;
+    
+    const msg = await WPP.chat.sendTextMessage(chatId, message, { createChat: true });          
+      
+    return true;
+    // return { msg: msg, status: true };
+  } catch (error) {
+    return false;
+  }
+};
