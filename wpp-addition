@@ -1,0 +1,69 @@
+window.WPP.checkNumberStatus = async (id) => {
+  try {
+    const isValid = await window.WPP.contact.queryExists(id);
+    return isValid.wid ? true : false;
+  } catch (error) {
+    return false;
+  }
+};
+
+window.WPP.sendMessageToId = async (chatId, message) => {
+  try {
+    const numberExist = await window.WPP.checkNumberStatus(chatId); // xxxxxxx@c.us
+    if (!numberExist) return false;
+    const msg = await window.WPP.chat.sendTextMessage(chatId, message);
+    if (!msg) return false;
+    return true;
+    // return { msg: msg, status: true };
+  } catch (error) {
+    return false;
+  }
+};
+
+window.WPP.sendMediaMessage = async (
+  base64,
+  chatId,
+  filename,
+  caption,
+  option = {},
+) => {
+  try {
+    const numberExist = await window.WWebJS.checkNumberStatus(chatId); // xxxxxxx@c.us
+
+    if (!numberExist) return false;
+
+    const arr = base64.split(",");
+    let mime = arr[0].match(/(?:data:)?(.*?)(?:;base64)?$/i)[1];
+    mime = mime.split(/\s+;\s+/).join("; "); // Fix spaces, like "audio/ogg; codecs=opus"
+
+    const type = mime.split("/")[0];
+
+    let options = {
+      media: {
+        data: arr[1], // string base64 tanpa mime
+        mimetype: mime,
+        filename: filename,
+      }, //base64
+      sendMediaAsSticker: false, // boolean
+      sendAudioAsVoice: false, // boolean
+      sendMediaAsDocument: false, // boolean
+      sendVideoAsGif: false, // boolean
+      sendMediaAsHd: false, // boolean
+    };
+
+    if (caption) {
+      options.caption = caption;
+    }
+
+    const msg = await window.WPP.chat.sendFileMessage(chatId, base64, {
+      type: type,
+      filename: filename,
+      caption: caption,
+    });
+    if (!msg) return false;
+    return true;
+    // return { msg: msg, status: true };
+  } catch (error) {
+    return false;
+  }
+};
