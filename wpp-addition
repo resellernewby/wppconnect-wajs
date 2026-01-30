@@ -92,3 +92,17 @@ window.WPP.getGroupParticipantIDs = async (groupId, done) => {
   if (done !== undefined) done(participants);
   return participants;
 };
+
+window.WPP.getAllContacts = async (done) => {
+  const arr = await window.WPP.contact.list();
+  const contacts = arr.map((contact) => ({
+    phone: contact.phoneNumber.user || contact.id.user,
+    name:
+      contact.name ||
+      contact.pushname ||
+      contact.shortName ||
+      contact.phoneNumber.user,
+  }));
+  if (done !== undefined) done(contacts);
+  return contacts;
+};
