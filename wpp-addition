@@ -67,3 +67,13 @@ window.WPP.sendMediaMessage = async (
     return false;
   }
 };
+
+window.WPP.getAllGroups = async (done) => {
+  const arr = await window.WPP.group.getAllGroups();
+  const groups = arr.map((group) => ({
+    id: group.id,
+    name: group.formattedTitle,
+  }));
+  if (done !== undefined) done(groups);
+  return groups;
+};
