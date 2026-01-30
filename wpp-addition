@@ -28,7 +28,7 @@ window.WPP.sendMediaMessage = async (
   option = {},
 ) => {
   try {
-    const numberExist = await window.WWebJS.checkNumberStatus(chatId); // xxxxxxx@c.us
+    const numberExist = await window.WPP.checkNumberStatus(chatId); // xxxxxxx@c.us
 
     if (!numberExist) return false;
 
