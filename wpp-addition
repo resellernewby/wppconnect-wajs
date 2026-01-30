@@ -94,25 +94,14 @@ window.WPP.getGroupParticipantIDs = async (groupId, done) => {
 };
 
 window.WPP.getAllContacts = async (done) => {
-  const arr = await window.WPP.contact.list();
-
-  const contacts = arr
-    .filter(contact =>
-      contact.phoneNumber?.server === "c.us" ||
-      contact.id?.server === "c.us"
-    )
-    .map(contact => ({
-      phone:
-        contact.phoneNumber?.user ||
-        contact.id?.user,
-      name:
-        contact.name ||
-        contact.pushname ||
-        contact.shortName ||
-        contact.id?.user,
+  const contacts = await Store.Contact._models
+    .filter((t) => t.id.server == "c.us")
+    .map((data) => ({
+      phone: data.id.user,
+      name: data.name || data.verifiedName || data.pushname || data.id.user,
     }));
 
-  if (done) done(contacts);
+  if (done != undefined) done(contacts);
   return contacts;
 };
 
