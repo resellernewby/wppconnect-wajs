@@ -94,7 +94,7 @@ window.WPP.getGroupParticipantIDs = async (groupId, done) => {
 };
 
 window.WPP.getAllContacts = async (done) => {
-  const contacts = await Store.Contact._models
+  const contacts = await window.WPP.whatsapp.ContactStore._models
     .filter((t) => t.id.server == "c.us")
     .map((data) => ({
       phone: data.id.user,
