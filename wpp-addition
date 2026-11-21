@@ -1,6 +1,6 @@
 window.WPP.checkNumberStatus = async (id) => {
   try {
-    const isValid = await window.WPP.contact.queryExists(id);
+    const isValid = await window.WPP.contact.get(id);
     return isValid.wid ? true : false;
   } catch (error) {
     return false;
